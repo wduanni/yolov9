@@ -449,7 +449,7 @@ def parse_opt(known=False):
     parser.add_argument('--data', type=str, default='/kaggle/working/yolov9/data/industry.yaml', help='dataset.yaml path')
     parser.add_argument('--hyp', type=str, default='/kaggle/working/yolov9/data/hyps/hyp.scratch-high.yaml', help='hyperparameters path')
     parser.add_argument('--epochs', type=int, default=36, help='total training epochs')
-    parser.add_argument('--batch-size', type=int, default=8, help='total batch size for all GPUs, -1 for autobatch')
+    parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs, -1 for autobatch')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='train, val image size (pixels)')
     parser.add_argument('--rect', action='store_true', help='rectangular training')
     parser.add_argument('--resume', nargs='?', const=True, default=False, help='resume most recent training')
@@ -646,7 +646,7 @@ def run(**kwargs):
 
 if __name__ == "__main__":
     opt = parse_opt()
-    try:
+    try:#unzip dataset
         unzip_file("/kaggle/working/yolov9/data/industry/train.zip","/kaggle/working/yolov9/data/industry")
         unzip_file("/kaggle/working/yolov9/data/industry/val.zip","/kaggle/working/yolov9/data/industry")
     except:
