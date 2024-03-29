@@ -4,9 +4,9 @@
 
 # Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
 
-train: data/industry/train/images # train images (relative to 'path') 90% of 847 train images
-val: data/industry/val/images # train images (relative to 'path') 10% of 847 train images
-test: data/industry/val/images
+train: /kaggle/working/yolov9/data/industry/train/images # train images (relative to 'path') 90% of 847 train images
+val: /kaggle/working/yolov9/data/industry/val/images # train images (relative to 'path') 10% of 847 train images
+test: /kaggle/working/yolov9/data/industry/val/images
 
 # Classes
 names:
