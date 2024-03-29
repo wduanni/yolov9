@@ -440,7 +440,7 @@ def parse_opt(known=False):
     # parser.add_argument('--weights', type=str, default=ROOT / 'yolo.pt', help='initial weights path')
     # parser.add_argument('--cfg', type=str, default='', help='model.yaml path')
     parser.add_argument('--weights', type=str, default=ROOT /'weights\\yolov9c.pt', help='initial weights path')
-    parser.add_argument('--cfg', type=str, default=ROOT/'models\\detect\\yolov9-c.yaml', help='model.yaml path')
+    parser.add_argument('--cfg', type=str, default='/kaggle/working/yolov9/models/detect/yolov9-c.yaml', help='model.yaml path')
     parser.add_argument('--data', type=str, default=ROOT / 'data/industry.yaml', help='dataset.yaml path')
     parser.add_argument('--hyp', type=str, default=ROOT / 'data/hyps/hyp.scratch-high.yaml', help='hyperparameters path')
     parser.add_argument('--epochs', type=int, default=500, help='total training epochs')
