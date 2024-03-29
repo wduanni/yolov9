@@ -646,7 +646,9 @@ def run(**kwargs):
 if __name__ == "__main__":
     opt = parse_opt()
     try:
-        unzip_file("/kaggle/working/yolov9/data/industry.zip","/kaggle/working/yolov9/data/")
+        unzip_file("/kaggle/working/yolov9/data/industry/train.zip","/kaggle/working/yolov9/data/industry")
+        unzip_file("/kaggle/working/yolov9/data/industry/val.zip","/kaggle/working/yolov9/data/industry")
     except:
-        unzip_file("/data/industry.zip","/data/")
+        unzip_file("data/industry/train.zip","data/industry")
+        unzip_file("data/industry/val.zip","data/industry")
     main(opt)
