@@ -30,12 +30,12 @@ def unzip_file(zip_file, extract_to):
         print("extracting to..:", extract_to)
 def save_one_txt(predn, save_conf, shape, file):
     # Save one txt result
-    global conf_thres
+    global opt
     gn = torch.tensor(shape)[[1, 0, 1, 0]]  # normalization gain whwh
     for *xyxy, conf, cls in predn.tolist():
         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
         # line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
-        line = (cls, conf, *xywh) if save_conf and save_conf>=conf_thres else (cls, *xywh)  # label format 移动置信度到第二列
+        line = (cls, conf, *xywh) if save_conf and save_conf>=opt.conf_thres else (cls, *xywh)  # label format 移动置信度到第二列
         with open(file, 'a') as f:
             f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
