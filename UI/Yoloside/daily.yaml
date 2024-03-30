@@ -1,0 +1,23 @@
+# YOLOv5 🚀 by Ultralytics, AGPL-3.0 license
+# DIUx xView 2018 Challenge https://challenge.xviewdataset.org by U.S. National Geospatial-Intelligence Agency (NGA)
+
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+
+train: /kaggle/working/yolov9/data/daily/train/images # train images (relative to 'path') 90% of 847 train images
+val: /kaggle/working/yolov9/data/daily/val/images # train images (relative to 'path') 10% of 847 train images
+test: /kaggle/working/yolov9/data/daily/val/images
+
+nc: 5  # number of classes
+# Classes
+names:
+  0: paper
+  1: cup
+  2: citrus
+  3: bottle
+  4: battery
+
+
+
+
+

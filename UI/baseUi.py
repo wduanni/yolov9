@@ -35,7 +35,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def open_image(self): # 打开图片
         print("点击了检测图片按钮")
         self.timer.stop()  # 停止视频检测
-        file_path = QFileDialog.getOpenFileName(self, dir=ROOT+"data/industry/val/images/train", filter="*.jpg;*.png;*.jpeg")
+        file_path = QFileDialog.getOpenFileName(self, dir=ROOT+"data/industry/train/images/", filter="*.jpg;*.png;*.jpeg")
         if file_path[0]:
             file_path = file_path[0]
             qimage = self.image_pred(file_path)
