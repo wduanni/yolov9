@@ -348,7 +348,7 @@ def run(
 
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data', type=str, default='/kaggle/working/yolov9/data/industry.yaml', help='dataset.yaml path')
+    parser.add_argument('--data', type=str, default='/kaggle/working/yolov9/data/daily.yaml', help='dataset.yaml path')
     parser.add_argument('--weights', nargs='+', type=str, default='/kaggle/working/yolov9/weights/best.pt', help='model path(s)')
     parser.add_argument('--batch-size', type=int, default=16, help='batch size')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
@@ -415,9 +415,9 @@ def main(opt):
 if __name__ == "__main__":
     opt = parse_opt()
     try:#unzip dataset
-        unzip_file("/kaggle/working/yolov9/data/industry/train.zip","/kaggle/working/yolov9/data/industry")
-        unzip_file("/kaggle/working/yolov9/data/industry/val.zip","/kaggle/working/yolov9/data/industry")
+        unzip_file("/kaggle/working/yolov9/data/daily/train.zip","/kaggle/working/yolov9/data/daily")
+        unzip_file("/kaggle/working/yolov9/data/daily/val.zip","/kaggle/working/yolov9/data/daily")
     except:
-        unzip_file("data/industry/train.zip","data/industry")
-        unzip_file("data/industry/val.zip","data/industry")
+        unzip_file("data/daily/train.zip","data/daily")
+        unzip_file("data/daily/val.zip","data/daily")
     main(opt)
