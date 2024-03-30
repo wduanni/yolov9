@@ -446,7 +446,7 @@ def parse_opt(known=False):
     # parser.add_argument('--cfg', type=str, default='', help='model.yaml path')
     parser.add_argument('--weights', type=str, default='/kaggle/working/yolov9/weights/yolov9c.pt', help='initial weights path')
     parser.add_argument('--cfg', type=str, default='/kaggle/working/yolov9/models/detect/yolov9-c.yaml', help='model.yaml path')
-    parser.add_argument('--data', type=str, default='/kaggle/working/yolov9/data/industry.yaml', help='dataset.yaml path')
+    parser.add_argument('--data', type=str, default='/kaggle/working/yolov9/data/daily.yaml', help='dataset.yaml path')
     parser.add_argument('--hyp', type=str, default='/kaggle/working/yolov9/data/hyps/hyp.scratch-high.yaml', help='hyperparameters path')
     parser.add_argument('--epochs', type=int, default=36, help='total training epochs')
     parser.add_argument('--batch-size', type=int, default=16, help='total batch size for all GPUs, -1 for autobatch')
@@ -647,9 +647,9 @@ def run(**kwargs):
 if __name__ == "__main__":
     opt = parse_opt()
     try:#unzip dataset
-        unzip_file("/kaggle/working/yolov9/data/industry/train.zip","/kaggle/working/yolov9/data/industry")
-        unzip_file("/kaggle/working/yolov9/data/industry/val.zip","/kaggle/working/yolov9/data/industry")
+        unzip_file("/kaggle/working/yolov9/data/daily/train.zip","/kaggle/working/yolov9/data/daily")
+        unzip_file("/kaggle/working/yolov9/data/daily/val.zip","/kaggle/working/yolov9/data/daily")
     except:
-        unzip_file("data/industry/train.zip","data/industry")
-        unzip_file("data/industry/val.zip","data/industry")
+        unzip_file("data/daily/train.zip","data/daily")
+        unzip_file("data/daily/val.zip","data/daily")
     main(opt)
