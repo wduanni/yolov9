@@ -35,7 +35,7 @@ def save_one_txt(predn, save_conf, shape, file):
     for *xyxy, conf, cls in predn.tolist():
         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
         # line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
-        line = (cls, conf, *xywh) if save_conf and save_conf>=opt.conf_thres else (cls, *xywh)  # label format 移动置信度到第二列
+        line = (cls, conf, *xywh) if save_conf and save_conf>=0.4 else (cls, *xywh)  # label format 移动置信度到第二列
         with open(file, 'a') as f:
             f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
@@ -333,7 +333,7 @@ def parse_opt():
     parser.add_argument('--weights', nargs='+', type=str, default='/kaggle/working/yolov9/weights/best.pt', help='model path(s)')
     parser.add_argument('--batch-size', type=int, default=16, help='batch size')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
-    parser.add_argument('--conf-thres', type=float, default=0.3, help='confidence threshold')
+    parser.add_argument('--conf-thres', type=float, default=0.001, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.7, help='NMS IoU threshold')
     parser.add_argument('--max-det', type=int, default=10, help='maximum detections per image')
     parser.add_argument('--task', default='val', help='train, val, test, speed or study')
