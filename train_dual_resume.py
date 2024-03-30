@@ -92,7 +92,9 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
         # Process custom dataset artifact link
         data_dict = loggers.remote_dataset
         if resume:  # If resuming runs from remote artifact
+            print("Resuming from remote artifact")
             weights, epochs, hyp, batch_size = opt.weights, opt.epochs, opt.hyp, opt.batch_size
+            print(f"reading epochs: {epochs}, batch_size: {batch_size}")
 
     # Config
     plots = not evolve and not opt.noplots  # create plots
@@ -176,6 +178,8 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
     best_fitness, start_epoch = 0.0, 0
     if pretrained:
         if resume:
+            print(f"Resuming input parameters,epoch:{epochs}")
+            
             best_fitness, start_epoch, epochs = smart_resume(ckpt, optimizer, ema, weights, epochs, resume)
         del ckpt, csd
 
