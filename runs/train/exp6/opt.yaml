@@ -31,7 +31,7 @@ hyp:
   mosaic: 1.0
   mixup: 0.15
   copy_paste: 0.3
-epochs: 64
+epochs: 91
 batch_size: 16
 imgsz: 640
 rect: false
