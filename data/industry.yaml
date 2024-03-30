@@ -8,6 +8,7 @@ train: /kaggle/working/yolov9/data/industry/train/images # train images (relativ
 val: /kaggle/working/yolov9/data/industry/val/images # train images (relative to 'path') 10% of 847 train images
 test: /kaggle/working/yolov9/data/industry/val/images
 
+nc: 13  # number of classes
 # Classes
 names:
   0: Double hexagonal column
