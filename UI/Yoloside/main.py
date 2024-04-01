@@ -260,7 +260,7 @@ class YoloPredictor(BasePredictor, QObject):
         data='industry.yaml'
         line_thickness=3
         classes=None
-        save_conf=False
+        save_conf=True
         hide_labels=False
         hide_conf=False
         agnostic_nms=False
@@ -397,7 +397,8 @@ class YoloPredictor(BasePredictor, QObject):
                             totalCls.add(int(cls))
                             if save_txt:  # Write to file
                                 xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
-                                line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
+                                # line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
+                                line = (cls, conf, *xywh) if save_conf else (cls, *xywh)  # label format
                                 with open(f'{txt_path}.txt', 'a') as f:
                                     f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
@@ -721,7 +722,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             config_json = json.dumps(config, ensure_ascii=False, indent=2)  
             with open(config_file, 'w', encoding='utf-8') as f:
                 f.write(config_json)
-            self.stop()             
+            self.stop()
+            if name.endswith('.jpg') or name.endswith('.png')or name.endswith('.jpeg'):#图片自动开始
+                self.run_button.setChecked(True)
+                self.run_or_continue()
 
     # Select camera source----  have one bug
     def chose_cam(self):

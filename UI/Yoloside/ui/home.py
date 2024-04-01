@@ -1554,13 +1554,13 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.Author.setText(QCoreApplication.translate("MainWindow", u"By javier", None))
+        self.Author.setText(QCoreApplication.translate("MainWindow", u"By WDN", None))
         self.Title.setText(QCoreApplication.translate("MainWindow", u"YoloSide", None))
         self.ToggleBotton.setText(QCoreApplication.translate("MainWindow", u"Hide", None))
         self.src_file_button.setText(QCoreApplication.translate("MainWindow", u"Local File", None))
         self.src_cam_button.setText(QCoreApplication.translate("MainWindow", u"Camera", None))
         self.src_rtsp_button.setText(QCoreApplication.translate("MainWindow", u"Rtsp", None))
-        self.VersionLabel.setText(QCoreApplication.translate("MainWindow", u"Version: 2.0", None))
+        self.VersionLabel.setText(QCoreApplication.translate("MainWindow", u"Version: 2.9", None))
         self.explain_title.setText(QCoreApplication.translate("MainWindow", u"YoloSideV9", None))
         self.settings_button.setText("")
         self.min_sf.setText("")
