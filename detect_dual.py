@@ -3,7 +3,7 @@ import os
 import platform
 import sys
 from pathlib import Path
-
+import sys,zipfile
 import torch
 
 FILE = Path(__file__).resolve()
@@ -20,6 +20,10 @@ from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import select_device, smart_inference_mode
 
 
+def unzip_file(zip_file, extract_to):
+    with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+        zip_ref.extractall(extract_to)
+        print("extracting to..:", extract_to)
 @smart_inference_mode()
 def run(
         weights=ROOT / 'yolo.pt',  # model path or triton URL
@@ -189,17 +193,17 @@ def run(
 
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default='weights/best.pt', help='model path or triton URL')
-    parser.add_argument('--source', type=str, default=imgROOT+'data/industry/train/images/train0010.jpg', help='file/dir/URL/glob/screen/0(webcam)')
+    parser.add_argument('--weights', nargs='+', type=str, default='/kaggle/working/yolov9/weights/industry.pt', help='model path or triton URL')
+    parser.add_argument('--source', type=str, default="/kaggle/working/yolov9/data/industry/images", help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--data', type=str, default='data/industry.yaml', help='(optional) dataset.yaml path')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
-    parser.add_argument('--max-det', type=int, default=10, help='maximum detections per image')
-    parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
+    parser.add_argument('--max-det', type=int, default=30, help='maximum detections per image')
+    parser.add_argument('--device', default='0,1', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--view-img', default=True,action='store_true', help='show results')
-    parser.add_argument('--save-txt', action='store_true', help='save results to *.txt')
-    parser.add_argument('--save-conf', action='store_true', help='save confidences in --save-txt labels')
+    parser.add_argument('--save-txt', default=True,action='store_true', help='save results to *.txt')
+    parser.add_argument('--save-conf', default=True,action='store_true', help='save confidences in --save-txt labels')
     parser.add_argument('--save-crop', action='store_true', help='save cropped prediction boxes')
     parser.add_argument('--nosave', action='store_true', help='do not save images/videos')
     parser.add_argument('--classes', nargs='+', type=int, help='filter by class: --classes 0, or --classes 0 2 3')
@@ -229,4 +233,10 @@ def main(opt):
 
 if __name__ == "__main__":
     opt = parse_opt()
+    try:#unzip dataset
+        unzip_file("/kaggle/working/yolov9/data/test/daily.zip","/kaggle/working/yolov9/data/daily")
+        unzip_file("/kaggle/working/yolov9/data/test/industry.zip","/kaggle/working/yolov9/data/industry")
+    except:
+        unzip_file("data/test/daily.zip","data/daily")
+        unzip_file("data/test/industry.zip","data/industry")
     main(opt)
