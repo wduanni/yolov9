@@ -270,7 +270,8 @@ class YoloPredictor(BasePredictor, QObject):
         visualize=False
         device='0'
         imgsz=(640, 640)
-        save_img = not source.endswith('.txt')  # save inference images
+        # save_img = not source.endswith('.txt')  # save inference images
+        save_img=self.save_res
         is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
         is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
         webcam = source.isnumeric() or source.endswith('.txt') or (is_url and not is_file)
@@ -315,6 +316,8 @@ class YoloPredictor(BasePredictor, QObject):
             self.done_warmup = True
         seen, windows, dt = 0, [], (Profile(), Profile(), Profile())
         self.seen,self.windows,self.dt = seen,windows,dt
+        if save_img:
+            print("输入保存图片")
         while True:
             if self.stop_dtc:
                 if isinstance(self.vid_writer[-1], cv2.VideoWriter):
@@ -398,7 +401,7 @@ class YoloPredictor(BasePredictor, QObject):
                             if save_txt:  # Write to file
                                 xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                                 # line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
-                                line = (cls, conf, *xywh) if save_conf else (cls, *xywh)  # label format
+                                line = (cls, conf, *xywh) if save_conf and conf>=self.conf_thres else (cls, *xywh)  # label format
                                 with open(f'{txt_path}.txt', 'a') as f:
                                     f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
@@ -415,6 +418,24 @@ class YoloPredictor(BasePredictor, QObject):
                     self.yolo2main_pre_img.emit(im0s if isinstance(im0s, np.ndarray) else im0s[0])
                     self.yolo2main_class_num.emit(len(totalCls))
                     self.yolo2main_target_num.emit(target_nums)
+                    if save_img:
+                        print("进入保存图片")
+                        if dataset.mode == 'image':
+                            cv2.imwrite(save_path, im0)
+                        else:  # 'video' or 'stream'
+                            if vid_path[i] != save_path:  # new video
+                                vid_path[i] = save_path
+                                if isinstance(vid_writer[i], cv2.VideoWriter):
+                                    vid_writer[i].release()  # release previous video writer
+                                if vid_cap:  # video
+                                    fps = vid_cap.get(cv2.CAP_PROP_FPS)
+                                    w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+                                    h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+                                else:  # stream
+                                    fps, w, h = 30, im0.shape[1], im0.shape[0]
+                                save_path = str(Path(save_path).with_suffix('.mp4'))  # force *.mp4 suffix on results videos
+                                vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
+                            vid_writer[i].write(im0)                    
                     if self.speed_thres != 0:
                         time.sleep(self.speed_thres/1000)   # delay , ms
                # progress bar
@@ -438,23 +459,7 @@ class YoloPredictor(BasePredictor, QObject):
                 cv2.waitKey(1)  # 1 millisecond
 
             # Save results (image with detections)
-            if save_img:
-                if dataset.mode == 'image':
-                    cv2.imwrite(save_path, im0)
-                else:  # 'video' or 'stream'
-                    if vid_path[i] != save_path:  # new video
-                        vid_path[i] = save_path
-                        if isinstance(vid_writer[i], cv2.VideoWriter):
-                            vid_writer[i].release()  # release previous video writer
-                        if vid_cap:  # video
-                            fps = vid_cap.get(cv2.CAP_PROP_FPS)
-                            w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-                            h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-                        else:  # stream
-                            fps, w, h = 30, im0.shape[1], im0.shape[0]
-                        save_path = str(Path(save_path).with_suffix('.mp4'))  # force *.mp4 suffix on results videos
-                        vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
-                    vid_writer[i].write(im0)
+
 
             # Print time (inference-only)
             LOGGER.info(f"{s}{'' if len(det) else '(no detections), '}{dt[1].dt * 1E3:.1f}ms")

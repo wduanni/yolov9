@@ -75,7 +75,7 @@ def run(
     imgsz = check_img_size(imgsz, s=stride)  # check image size
 
     # Dataloader
-    bs = 1  # batch_size
+    bs = 16  # batch_size
     if webcam:
         view_img = check_imshow(warn=True)
         dataset = LoadStreams(source, img_size=imgsz, stride=stride, auto=pt, vid_stride=vid_stride)
@@ -140,7 +140,7 @@ def run(
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         # line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
-                        line = (cls, conf,*xywh ) if save_conf and save_conf>=conf_thres else (cls, *xywh)  # label format 移动置信度
+                        line = (cls, conf,*xywh ) if save_conf and conf>=conf_thres else (cls, *xywh)  # label format 移动置信度
                         with open(f'{txt_path}.txt', 'a') as f:
                             f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
