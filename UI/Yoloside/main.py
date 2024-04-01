@@ -82,7 +82,7 @@ class YoloPredictor(BasePredictor, QObject):
         self.batch = None
         self.callbacks = defaultdict(list, callbacks.default_callbacks)  # add callbacks
         callbacks.add_integration_callbacks(self)
-
+    '''
     # main for detect
     @smart_inference_mode()
     def run(self):
@@ -218,7 +218,7 @@ class YoloPredictor(BasePredictor, QObject):
         except Exception as e:
             pass
             print(e)
-            self.yolo2main_status_msg.emit('%s' % e)
+            self.yolo2main_status_msg.emit('%s' % e)'''
 
     @smart_inference_mode()
     def run(self,
@@ -316,8 +316,7 @@ class YoloPredictor(BasePredictor, QObject):
             self.done_warmup = True
         seen, windows, dt = 0, [], (Profile(), Profile(), Profile())
         self.seen,self.windows,self.dt = seen,windows,dt
-        if save_img:
-            print("输入保存图片")
+
         while True:
             if self.stop_dtc:
                 if isinstance(self.vid_writer[-1], cv2.VideoWriter):
@@ -379,6 +378,9 @@ class YoloPredictor(BasePredictor, QObject):
                     p = Path(p)  # to Path
                     save_path = str(save_dir / p.name)  # im.jpg
                     txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt
+
+                    if os.path.isfile(f'{txt_path}.txt'):
+                        os.remove(f'{txt_path}.txt')
                     s += '%gx%g ' % im.shape[2:]  # print string
                     gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
                     imc = im0.copy() if save_crop else im0  # for save_crop
@@ -402,6 +404,7 @@ class YoloPredictor(BasePredictor, QObject):
                                 xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                                 # line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                                 line = (cls, conf, *xywh) if save_conf and conf>=self.conf_thres else (cls, *xywh)  # label format
+                                # print(f"保存置信度为{conf}的对象，因为阈值为{self.conf_thres}")
                                 with open(f'{txt_path}.txt', 'a') as f:
                                     f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
@@ -419,7 +422,7 @@ class YoloPredictor(BasePredictor, QObject):
                     self.yolo2main_class_num.emit(len(totalCls))
                     self.yolo2main_target_num.emit(target_nums)
                     if save_img:
-                        print("进入保存图片")
+
                         if dataset.mode == 'image':
                             cv2.imwrite(save_path, im0)
                         else:  # 'video' or 'stream'
