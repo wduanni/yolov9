@@ -203,7 +203,7 @@ def parse_opt():
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
     parser.add_argument('--max-det', type=int, default=30, help='maximum detections per image')
     parser.add_argument('--device', default='0,1', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
-    parser.add_argument('--view-img', default=True,action='store_true', help='show results')
+    parser.add_argument('--view-img', default=False,action='store_true', help='show results')
     parser.add_argument('--save-txt', default=True,action='store_true', help='save results to *.txt')
     parser.add_argument('--save-conf', default=True,action='store_true', help='save confidences in --save-txt labels')
     parser.add_argument('--save-crop', action='store_true', help='save cropped prediction boxes')
